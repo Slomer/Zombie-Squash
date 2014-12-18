@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Effective JavaScript: Frogger</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!--underscore-min-.js has no code from me and is a library fill of win -->
+    <script src="js/underscore-min.js"></script>
+    <!--globals.js holds various global variables and objects in a single GLBL
+     object and must be loaded before the other game javascript files -->
+    <script src="js/globals.js"></script>
+    <!--resources.js is the unmodified provided library and used for images -->
+    <script src="js/resources.js"></script>
+    <!--soundsjs.js has no code from me and is used for sounds -->
+    <script src="js/soundjs-NEXT.min.js"></script>
+    <!--soundsjs.js has no code from me and is used for preloading sounds -->
+    <script src="js/preloadjs-NEXT.min.js"></script>
+    <!--levelmaker.js holds our level class, constructor, and some helpers -->
+    <script src="js/levelmaker.js"></script>
+    <!--player.js holds our player class and related items. -->
+    <script src="js/player.js"></script>
+    <!--enemy.js holds our enemy class and related items. -->
+    <script src="js/enemy.js"></script>
+    <!--misc.js holds our misc classes and other misc items. -->    
+    <script src="js/misc.js"></script>
+    <!--engine.js holds our logic loop, init items, and some helpers -->
+    <script src="js/engine.js"></script>
+
+    <!--div below is used as a self rolled modal for instructions popup -->
+    <div id="instructions">
+        <h1>Instructions (click in game area to continue)</h1>
+        <ul>
+          <li><strong>movement:</strong> ASWD, arrow keys, numpad
+            4,5/2,6,8</li>
+          <li><strong>jump:</strong> space, numpad 0</li>
+          <li><strong>attack:</strong> F, control, enter, numpad +</li>
+          <li><strong>attack:</strong> F, control, numpad +</li>
+          <li><strong>pause:</strong> P, pause/break, pause button at
+            top right</li>
+        </ul>
+        <ul>
+        <li>movement keys can be held or tapped.  Either works fine.</li>
+        <li>You can damage enemies by jumping on their head.  You can also
+         attack them, but your attack has a delay.</li>
+        <li>Zombie kills will be counted at the top left, along with your
+            current level</li>
+        <li>Some zombies just wander around, but most will charge you.</li>
+        <li>As your level goes up, so does the game difficulty.  Zombies will
+            be faster, more numerous, and you will be invincible less time
+            after being hurt.</li>
+        <li>Your health shows at the bottom left of the game area</li>
+        <li>An exclamation point above you means you took damage and are
+            temporarily invulnerable.</li>
+        <li>There is a pause button at the top right, which will also reshow
+            these instructions.</li>
+        <li>The game will also pause any time the game window loses focus.</li>
+        <li>The level is procedurally generated, so reload if you don't
+            like yours.</li>
+        <li>You can walk through the left/right side of the screen but not
+            the top/bottom.</li>
+        <li>No actual reset is built into the game yet, so reload the page
+            when you 'die' for now.  (or cheat by unpausing)</li>
+        </ul>
+    </div></body>
+</html>
