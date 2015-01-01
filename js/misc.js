@@ -320,9 +320,6 @@ function createGoreSound() {
     createjs.Sound.play(_.sample(this.sounds.splashes));
 }
 
-// generate a random level
-// TODO: make this an option with prebuilt levels also available via parameter
-var level = new ProcLevel;
 // make a container for our splashes
 var allSplashes = [];
 // start off with 5 splashes to use.  We can make more later as we need them
@@ -335,13 +332,10 @@ for (var goreCount = 0;goreCount < 4; goreCount++) {allGores.push(new Gore);}
 // make a container for our enemies
 var allEnemies = [];
 // start off with 10 enemies to use.  We can make more later as we need them
+//we will activate our enemies in the reset function, so don't do that here
 for (var enemyCount = 0;enemyCount < 10; enemyCount++) {
     allEnemies.push(new Enemy);}
-// even though we have 10, we will only activate 1 per difficulty level that we started with
-for (var actEnemyCount = 0;actEnemyCount < GLBL.difficulty; actEnemyCount++){
-    createEnemy();}
-// make a new player instance
-var player = new Player;
+
 
 /**
  * This event listens for key presses and sends the keys to an array for
@@ -406,7 +400,7 @@ function absDis(thing1,thing2,checkingClone) {
     // the result should be that you have to be visually closer up/down than
     // left/right to collide
     var yadj = GLBL.ratioAdjust;
-    
+
     var clonexoff = 0;
     var cloneyoff = 0;
     //if we are checking a clone, we will assume the first thing is the player
@@ -485,17 +479,25 @@ function checkSquareType(rowOrX, colOrY, coords) {
  * @param  {boolean} hides if not true, shows if true
  * @return {none}
  */
-function toggleInstructions(show) {
+function toggleInstructions(show, dead) {
 
-    //find our html div to use as a modal
-    var child = document.getElementById("instructions");
-
+    //find our html divs to use as a modals
+    var child, child2;
+    if (dead !== true) {
+        child = document.getElementById("start");
+        child2 = document.getElementById("dead");
+    }
+    else {
+        child = document.getElementById("dead");
+        child2 = document.getElementById("start");
+    }    
     if (show === true) {
         resizeInstructions();
         child.style.visibility = "visible";
     }
     else {
         child.style.visibility = "hidden";
+        child2.style.visibility = "hidden";
     }
 
 }
@@ -503,18 +505,29 @@ function toggleInstructions(show) {
 /**
  * this moves and resizes the modal based on browser resize event. This ensures
  * the modal used matches the game window
+/* @param  {dom element} child the element we want to resize
  * @return {[type]}
  */
+
+
 function resizeInstructions() {
 
     var canvas = document.getElementById("gameCanvas");
     GLBL.canvasRect = canvas.getBoundingClientRect();
 
-    var child = document.getElementById("instructions");
+    //resize start modal
+    var child = document.getElementById("start");
     child.style.width = GLBL.canvasRect.width - (GLBL.colWidth) + "px";
     child.style.height = GLBL.canvasRect.height - (GLBL.rowHeight*2.5) + 'px';
     child.style.left = GLBL.canvasRect.left + (GLBL.colWidth/3) + 'px';
     child.style.top = GLBL.canvasRect.top + GLBL.rowHeight + 'px';
+    
+    //now resize death modal
+    child = document.getElementById("dead");
+    child.style.width = GLBL.canvasRect.width - (GLBL.colWidth) + "px";
+    child.style.height = GLBL.canvasRect.height - (GLBL.rowHeight*2.5) + 'px';
+    child.style.left = GLBL.canvasRect.left + (GLBL.colWidth/3) + 'px';
+    child.style.top = GLBL.canvasRect.top + GLBL.rowHeight + 'px';    
 }
 
 /**

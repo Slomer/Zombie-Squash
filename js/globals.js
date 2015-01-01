@@ -6,6 +6,8 @@
 var GLBL = {
     //boolean holding game pause state
     paused : true,
+    //is the player dead?  Used to show different modal and effect on pause
+    playerDied : false,
     //boolean to prevent game from diong on pause activities repeatedly
     waspaused : false,    
     //boolean holding game pause state

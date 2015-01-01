@@ -132,7 +132,25 @@
             //show instructions while we are at it
             GLBL.waspaused = true;
             renderUI(true);
-            toggleInstructions(true);
+            if (GLBL.playerDied !== true) {
+                toggleInstructions(true);
+            }
+            //player died so draw some red and show a different modal
+            else {
+                var death_gradient = ctx.createLinearGradient(
+                    0, 0, 0, canvas.height);
+                death_gradient.addColorStop(0, "red");
+                death_gradient.addColorStop(1, "transparent");
+                ctx.fillStyle = death_gradient;
+                ctx.fillRect(0,0,canvas.width,canvas.height);
+                //draw ui one last time this game so player can see score
+                renderUI(false, true)
+                //turn on death isntruction modal
+                toggleInstructions(true, true);
+                //let the game know the player isn't dead and reset the game
+                GLBL.playerDied = false;
+                reset();
+            }
         }
         /* Use the browser's requestAnimationFrame function to call this
          * function again as soon as the browser is able to draw another frame.
@@ -232,10 +250,11 @@
 
     /**
      * renders our actual UI elements
-     * @param  {boolean} if we are paused we will change the pause button
+     * @param  {boolean} pausedif we are paused we will change the pause button
+     * @param  {boolean} dead if we are dead we will change the ui
      * @return {none}
      */
-    function renderUI(paused){
+    function renderUI(paused, dead){
 
         //draw the pause button in the middle of the last column
         //above the playarea
@@ -246,7 +265,8 @@
                 GLBL.spriteWidth / 2,
                 GLBL.spriteHeight / 2);
         }
-        else {
+        //draw no pause button when dead
+        else if (dead !== true) {
             ctx.drawImage(Resources.get('images/ui-pause2.png'),
                 canvas.width - (GLBL.spriteWidth / 4) - (GLBL.colWidth/2),
                 -GLBL.spriteHeight / 8,
@@ -292,7 +312,7 @@
 
         //draw a thin black border around the entire game area if that
         //setting is on in our GLBL object
-        if (GLBL.frame === true){
+        if (GLBL.frame === true || dead === true){
             ctx.strokeRect(0,0,canvas.width,canvas.height);}
     }
 
@@ -343,12 +363,31 @@
 
     }
 
-    /* This function does nothing but it could have been a good place to
-     * handle game reset states - maybe a new game menu or a game over screen
-     * those sorts of things. It's only called once by the init() method.
+    /**
+     *  This function both sets/resets some objects.  It is called once
+     *  in the init function and again any time we want to restart from
+     *  a fresh user game experience. It is global to make it easy to call
+     *  from outside the engine.
      */
-    function reset() {
-        //TODO: add an actual reset and game over instead of just a pause
+    global.reset = function() {
+        // generate a random level and make it a global level variable
+        // so it is easy to work with in the console and access from other
+        // methods/functions.
+        global.level = new ProcLevel;
+        GLBL.squares = [];level = new ProcLevel();
+        //loop through and reset all enemies and reset them
+        for (var i = 0, enLen = allEnemies.length; i < enLen;i++){
+            allEnemies[i].hurt(0, true)
+        };
+        //reset game level
+        GLBL.difficulty = GLBL.difficultyStart;
+        //since we only have one player, create one to start and 
+        //just overwrite it for resets.
+        player = new Player();
+        //activate some enemies again
+        //activate 1 enemy per difficulty level that we started with
+        for (var actEnemyCount = 0;actEnemyCount < GLBL.difficulty; actEnemyCount++){
+            createEnemy();}
     }
 
     /**
@@ -503,6 +542,9 @@
      * from within their app.js files.
      */
     global.ctx = ctx;
+    /* make the reset function available globally so we can
+     *easily reset the game
+     */
 
 //this call's itself and uses (this) to feed in the global scope
 })(this);

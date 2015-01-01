@@ -193,6 +193,8 @@ Player.prototype.hurt = _.throttle(function() {
     //player is dead
     //TODO: add actual death logic instead of just a pause
     else {
+        //tell the game the player died.
+        GLBL.playerDied = true;
         GLBL.paused = true;
         //play sound of zombies eating player (or me eating celery... :) )
         createjs.Sound.play('sounds/enemy-eating.mp3');

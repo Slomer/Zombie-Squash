@@ -95,13 +95,37 @@ var Enemy = function() {
  * cause damage to enemies, currently all enemies die in one hit
  * will play a sound, remove the enemy visually, and reset items of the enemy
  * @param  {number} dt is the time measurement from our engine
+ * @param  {boolen} reset changes some things if we are using this to reset
  * @return {none}
  */
-Enemy.prototype.hurt = function(dt) {
-    //TODO: make a reset function to seperate this out now that it is so long
-    //a reset function will be needed for when a decent game reset is added
-    createGore.call(this,this.x,this.y,false,true);
-    createjs.Sound.play(_.sample(this.sounds.pains));
+Enemy.prototype.hurt = function(dt, reset) {
+    //this function serves double duty and is also used in our reset
+    //along with the silent parameter
+    if (reset !== true) {
+        createGore.call(this,this.x,this.y,false,true);
+        createjs.Sound.play(_.sample(this.sounds.pains));
+
+        //track the kill in our player object
+        player.kills += 1;
+        player.killsThisLevel += 1;
+        //if we have enough kills, up the difficulty
+        if (player.killsThisLevel >= Math.pow(GLBL.difficulty,2)) {
+            GLBL.difficulty += 1;
+            player.killsThisLevel = 0;
+            //we want 1 new enemy active enemy added per difficulty level
+            //TODO: make this adjustable via global instead of static one per level
+            createEnemy();
+        }
+        //how fast do we move
+        this.speed = _.random(5, 15) * GLBL.difficulty;
+    }
+    else {
+        //start inactive since we are resetting
+        this.active = false;
+        //how fast do we move
+        this.speed = _.random(5, 15) * GLBL.difficultyStart;
+    }
+
     this.sprites.body = _.sample(allBodies);
     this.sprites.makeup = _.sample(allMakeups);
     this.wander = (_.random(1,100) < GLBL.wanderChance ? true : false);
@@ -112,19 +136,7 @@ Enemy.prototype.hurt = function(dt) {
     this.y = 83 * ((this.spawnRow - 1.5));
     this.x2 = this.x;
     this.y2 = this.y;
-    this.speed = _.random(5, 15) * GLBL.difficulty; //how fast do we move
     this.swimming = true;
-    //track the kill in our player object
-    player.kills += 1;
-    player.killsThisLevel += 1;
-    //if we have enough kills, up the difficulty
-    if (player.killsThisLevel >= Math.pow(GLBL.difficulty,2)) {
-        GLBL.difficulty += 1;
-        player.killsThisLevel = 0;
-        //we want 1 new enemy active enemy added per difficulty level
-        //TODO: make this adjustable via global instead of static one per level
-        createEnemy();
-    }
 
 };
 

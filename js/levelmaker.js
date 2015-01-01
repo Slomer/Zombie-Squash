@@ -1,47 +1,5 @@
 /**
- * this is the class for our game level.  Can't do much without it
- */
-var Level = function() {
-    //grab a random tile set
-    this.tiles = _.sample(allLevelTiles);
-
-    //check how many squares to generate and fill
-    this.totalSquares = GLBL.rows * GLBL.cols;
-
-    //how many tiles of each type will we try to allow
-    this.typeMax = {
-        stone : Math.floor(this.totalSquares * 0.4), //36 on a 9x10 board
-        water : Math.floor(this.totalSquares * 0.3), //27 on a 9x10 board
-        grass : Math.floor(this.totalSquares * 0.4), //36 on a 9x10 board
-    };
-
-    //how many non contiguous groups of each type will we try to allow
-    //this is a bit misleading because we want contiguous sections
-    //but not necessarilly of this type.  Just when checking this type
-    this.groupMax = {
-        stone : Math.ceil(this.totalSquares / 30), //should be 1 to 3 normally
-        water : Math.ceil(this.totalSquares / 25), //should be 1 to 3 normally
-        grass : Math.ceil(this.totalSquares / 25), //should be 2 to 6 normally
-    };
-
-    //counters for how many tiles of a type we have already generated
-    this.typeCount = {
-        stone : 0,
-        water : 0,
-        grass : 0,
-    };
-
-    //counters for how many groups we have generated while checking this type
-    this.groupCount = {
-        stone : 0,
-        water : 0,
-        grass : 0,
-    };
-
-};
-
-/**
- * this object holds templates of tile sets we can sampel from when generating
+ * this object holds templates of tile sets we can sample from when generating
  * our level.
  * @type {Object}
  */
@@ -184,10 +142,49 @@ var allLevelTiles = {
 };
 
 /**
- * Subclass of Level.  Procedurally generates a level with some really rough
- * logic and check to ensure it isn't a bunch of random individual squares
+ * This is the class for our game level.  Procedurally generates a level with
+ * some really rough logic and check to ensure it isn't a bunch of random
+ * individual squares
  */
-var ProcLevel = function() {
+var Level = function() {
+
+    //grab a random tile set
+    this.tiles = _.sample(allLevelTiles);
+
+    //check how many squares to generate and fill
+    this.totalSquares = GLBL.rows * GLBL.cols;
+
+    //how many tiles of each type will we try to allow
+    this.typeMax = {
+        stone : Math.floor(this.totalSquares * 0.4), //36 on a 9x10 board
+        water : Math.floor(this.totalSquares * 0.3), //27 on a 9x10 board
+        grass : Math.floor(this.totalSquares * 0.4), //36 on a 9x10 board
+    };
+
+    //how many non contiguous groups of each type will we try to allow
+    //this is a bit misleading because we want contiguous sections
+    //but not necessarilly of this type.  Just when checking this type
+    this.groupMax = {
+        stone : Math.ceil(this.totalSquares / 30), //should be 1 to 3 normally
+        water : Math.ceil(this.totalSquares / 25), //should be 1 to 3 normally
+        grass : Math.ceil(this.totalSquares / 25), //should be 2 to 6 normally
+    };
+
+    //counters for how many tiles of a type we have already generated
+    this.typeCount = {
+        stone : 0,
+        water : 0,
+        grass : 0,
+    };
+
+    //counters for how many groups we have generated while checking this type
+    this.groupCount = {
+        stone : 0,
+        water : 0,
+        grass : 0,
+    };
+
+    this.tiles = _.sample(allLevelTiles);
     //disposable square holder and boolean for our loop
     var currentSquare;
     var haveASquare = false;
@@ -263,26 +260,11 @@ var ProcLevel = function() {
     }
 };
 
-/**
- * inherit from Level for ProcLevel
- * @type {Level}
- */
-ProcLevel.prototype = new Level();
 
 /**
- * Subclass of Level.  Currently unused, but will be for loading preset levels
- * instead of randomly generated levels when we want to do that
- * such as when boss monsters are added or if themed levels are added
+ * This renders our level on screen
  */
-var StaticLevel = function() {
-
-};
-
-/**
- * inherit from Level for StaticLevel
- * @type {Level}
- */
-StaticLevel.prototype = new Level();Level.prototype.render = function() {
+Level.prototype.render = function() {
 
     //keep track of our current square as we itterate through them all
     //not doing this in the loop so we can instead use the loop to move coords
