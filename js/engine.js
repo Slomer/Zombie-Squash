@@ -373,8 +373,8 @@
         // generate a random level and make it a global level variable
         // so it is easy to work with in the console and access from other
         // methods/functions.
-        global.level = new ProcLevel;
-        GLBL.squares = [];level = new ProcLevel();
+        GLBL.squares = [];
+        global.level = new Level();
         //loop through and reset all enemies and reset them
         for (var i = 0, enLen = allEnemies.length; i < enLen;i++){
             allEnemies[i].hurt(0, true)
