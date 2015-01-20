@@ -161,7 +161,7 @@ function createSplash(x,y,upSplash,silent){
         allSplashes.push(thisSplash = new Splash);
     }
     //now activate our splash.  It should only be null above our cap, but check it first.
-    if (thisSplash !== null){
+    if (thisSplash !== undefined){
         thisSplash.frame = 1;
         thisSplash.ticks = 0;
         thisSplash.x = x;
@@ -298,7 +298,7 @@ function createGore(x,y,upGore,silent){
         allGores.push(thisGore = new Gore);
     }
     //now activate our gore.  It should only be null above our cap, but check it first.
-    if (thisGore !== null){
+    if (thisGore !== undefined){
         thisGore.frame = 1;
         thisGore.ticks = 0;
         thisGore.x = x;
@@ -430,7 +430,7 @@ function absDis(thing1,thing2,checkingClone) {
     //but it should help with close collision perspective
     bsquared = bsquared * thing1.size.collratio * thing2.size.collratio;
     //now that we have the 2 sides of our triangle, we can use them to get
-    //the third, which is our distance
+    //the third, which is our distance   
     return Math.sqrt(asquared + bsquared);
 }
 

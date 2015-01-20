@@ -109,7 +109,7 @@ Enemy.prototype.hurt = function(dt, reset) {
         player.kills += 1;
         player.killsThisLevel += 1;
         //if we have enough kills, up the difficulty
-        if (player.killsThisLevel >= Math.pow(GLBL.difficulty,2)) {
+        if (player.killsThisLevel >= Math.pow(GLBL.difficulty,1.5)) {
             GLBL.difficulty += 1;
             player.killsThisLevel = 0;
             //we want 1 new enemy active enemy added per difficulty level
@@ -277,8 +277,8 @@ function createEnemy(){
     if (thisEnemy === undefined && allEnemies.length < GLBL.maxEnemies) {
         allEnemies.push(thisEnemy = new Enemy);
     }
-    //now activate our enemy.  It should only be null above our cap, but check it first.
-    if (thisEnemy !== null){
+    //now activate our enemy.  It should only be undefined above our cap, but check it first.
+    if (thisEnemy !== undefined){
         thisEnemy.active = true;
     }
 }

@@ -29,7 +29,12 @@ var Weapon = function() {
     //visual sprites for our splashes
     //2 are used so that we can have a splash behind the player that does not
     //draw over them but is there if they move
-    this.sprite = 'images/char-boy-up.png';
+    this.sprites = {
+            up : 'images/weapon-knife-up.png',
+            down : 'images/weapon-knife-down.png',
+            left : 'images/weapon-knife-left.png',
+            right : 'images/weapon-knife-right.png',
+        };
 
     this.direction = 'down';
 
@@ -44,10 +49,21 @@ var Weapon = function() {
     this.size = {
         width : 101,
         height : 171,
+        //will be used in collision to offset x/y checks.
+        //Everything should be 1 until larger enemies are added.
+        collratio : 1        
     };
 
     //speed of thrown weapon
-    this.speed = 50;
+    this.speed = 500;
+
+    //object holds variable used for collisions and possibly other items
+    //that aim at visual center of enemy and not actual sprite center
+    this.center = {
+        xoff : this.size.width / 2,
+        yoff : this.size.height / 2
+    };
+
 };
 
 /**
@@ -57,7 +73,7 @@ var Weapon = function() {
  */
 Weapon.prototype.update = function(dt) {
     //end early if we somehow called this on an inactive enemy
-    if (this.active !== true) {return;}
+    if (this.thrown !== true) {return;}
     this.movement(dt);
 };
 
@@ -124,6 +140,11 @@ Weapon.prototype.movement = function(dt) {
     else if ((this.x2 > this.x) && (this.x2 - this.x > 10)) {
         this.direction = 'right';
     }
+
+    //disable thrown weapon if it reaches it's destination
+    if (this.x === this.x2 && this.y === this.y2) {
+        this.thrown = false;
+    }
 };
 
 
@@ -135,7 +156,7 @@ Weapon.prototype.movement = function(dt) {
  */
 Weapon.prototype.render = function(dt) {
     var dsprite;
-    dsprite = this.sprite;
+    dsprite = this.sprites[this.direction];
 
     if(this.thrown === true) {
         ctx.drawImage(
@@ -161,24 +182,37 @@ Weapon.prototype.render = function(dt) {
  * @param  {boolean} silent skips the sound playing for when cloning player
  * @return {none}
  */
-function createWeapon(x, y, silent){
+function createWeapon(x, y, direction){
     //look for any available existing splashes
     var thisWeapon = _.find(allWeapons,function(weapon){return weapon.thrown !== true;});
     //if we didn't find any, make a new one (with a cap for sanity sake)
     if (thisWeapon === undefined && allWeapons.length < GLBL.maxWeapons) {
-        console.log("moonewwep");
         allWeapons.push(thisWeapon = new Weapon);
     }
-    //now activate our splash.  It should only be null above our cap, but check it first.
-    if (thisWeapon !== null){
-        thisWeapon.x2 = x;
-        thisWeapon.y2 = y;
+
+    var destX = x;
+    var destY = y;
+    if (direction === 'up'){
+        destY = -200;
+    }
+    else if (direction === 'down'){
+        destY = GLBL.canvasRect.height + 200;
+    }
+    else if (direction === 'right'){
+        destX = GLBL.canvasRect.width + 200;
+    }
+    else if (direction === 'left'){
+        destX = -200;
+    }
+    //now activate our splash.  It should only be undefined above our cap, but check it first.
+    if (thisWeapon !== undefined){
+        thisWeapon.x2 = destX;
+        thisWeapon.y2 = destY;
         thisWeapon.x = x;
         thisWeapon.y = y;
+        thisWeapon.direction = direction
         thisWeapon.thrown = true;
-        if (silent !== true) {
-            createWeaponSound.call(this);
-        }
+        createWeaponSound.call(this);
     }
 }
 

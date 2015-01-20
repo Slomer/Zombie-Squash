@@ -164,10 +164,14 @@ Player.prototype.attack = _.throttle(function() {
     _.delay(function(){player.attacking = false;},100);
 
     //hurt each enemy that we found was close enough above, if any
+    //if we hit no enemies, throw a weapon instead
     if (attackList.length > 0) {
         _.each(attackList, function(Enemy){Enemy.hurt();});
     }
-    //createWeapon(player.x, player.y);
+    else {
+        createWeapon(player.x, player.y, player.direction);
+    }
+
     //play a sound.  Using jump sound for now.
     //TODO: make an attack sound
     createjs.Sound.play(_.sample(this.sounds.jumps));
@@ -630,7 +634,6 @@ Player.prototype.movement = function(dt) {
         // we want up and down to be dominant draw directions
         // so overwrite left/right if we find we are moving on y
         this.directiondraw = 'up' ;
-        //console.log (this.y);
     }
     else {
         // catch all, put us where we wanted to be on Y

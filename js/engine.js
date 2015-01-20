@@ -194,6 +194,13 @@
     function update(dt) {
         updateEntities(dt);
         checkCollisions();
+        allWeapons.forEach(function(weapon){
+            if (weapon.thrown === true) {
+                checkWeaponCollisions(weapon);
+            }
+        });
+
+
     }
 
     /* This is called by the update function  and loops through all of the
@@ -413,6 +420,27 @@
      * @param  {boolean} checkClone tells us to check a copy of the player
      * @return {none}
      */
+    function checkWeaponCollisions(weapon) {
+
+        //get list of enemies close enough to hit with this weapon
+        var wepHitList = _.filter(allEnemies, function(Enemy){
+                return (absDis(weapon,Enemy) < GLBL.squashDist);
+            });
+
+        //hurt the first enemy in the list and stop the weapon
+        if (wepHitList.length > 0) {
+            wepHitList[0].hurt();
+            weapon.thrown = false;
+        }
+
+    }
+
+    /**
+     * check collission based on distance and where necessary hurt either
+     * the player or the enemies
+     * @param  {boolean} checkClone tells us to check a copy of the player
+     * @return {none}
+     */
     function checkCollisions(checkClone) {
 
         //get list of enemies close enough to squish
@@ -538,11 +566,15 @@
         'images/makeup-zombie2-up.png',
         'images/makeup-zombie2-left.png',
         'images/makeup-zombie2-right.png',
-        //weapon slashes
+        //weapon sprites
         'images/weapon-slash-down.png',
         'images/weapon-slash-up.png',
         'images/weapon-slash-left.png',
         'images/weapon-slash-right.png',
+        'images/weapon-knife-down.png',
+        'images/weapon-knife-up.png',
+        'images/weapon-knife-left.png',
+        'images/weapon-knife-right.png',
         //UI
         'images/ui-pause1.png',
         'images/ui-pause2.png',
