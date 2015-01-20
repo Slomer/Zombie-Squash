@@ -312,8 +312,8 @@
         }
 
         //draw our info text a little to the right of our kill icon
-        uiText = player.kills + '  Level: ' + (GLBL.difficulty -
-            GLBL.difficultyStart + 1) + ' Next: ' +
+        uiText = player.kills + '   Level: ' + (GLBL.difficulty -
+            GLBL.difficultyStart + 1) + '   Next: ' +
             Math.ceil(Math.pow(GLBL.difficulty,1.5) - player.killsThisLevel);
 
         ctx.fillText( uiText,
