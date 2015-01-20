@@ -1,7 +1,7 @@
 #Zombie Squash
 
 1. Download all files, then run index.html in a modern browser.
-2. Alternatively, a live version can be found [here](http://friskynomad.com/gametest/) 
+2. Alternatively, a live version can be found [here](https://slomer.github.io/Zombie-Squash/) 
 
 ##gameplay instruction:
 
