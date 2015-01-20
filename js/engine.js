@@ -313,7 +313,8 @@
 
         //draw our info text a little to the right of our kill icon
         uiText = player.kills + '  Level: ' + (GLBL.difficulty -
-            GLBL.difficultyStart + 1);
+            GLBL.difficultyStart + 1) + ' Next: ' +
+            Math.ceil(Math.pow(GLBL.difficulty,1.5) - player.killsThisLevel);
 
         ctx.fillText( uiText,
             (GLBL.colWidth) - (GLBL.spriteWidth / 8),
@@ -356,7 +357,7 @@
         _.filter(_.sortBy(allWeapons,function(weapon){return weapon.y;}),
             function(weapon){return weapon.y <= player.y;}).
                 forEach(function(weapon) {weapon.render(dt);
-        });   
+        });
 
         //render the front of any gores that are all the way behind the player
         _.filter(allGores, function(gore){return gore.y + 5 < player.y;}).
@@ -383,7 +384,7 @@
         _.filter(_.sortBy(allWeapons,function(weapon){return weapon.y;}),
             function(weapon){return weapon.y > player.y;}).
                 forEach(function(weapon) {weapon.render(dt);
-        });        
+        });
 
     }
 
@@ -512,7 +513,8 @@
         {id:'sounds/enemy-squish2', src:'sounds/enemy-squish2.mp3'},
         {id:'sounds/enemy-squish3', src:'sounds/enemy-squish3.mp3'},
         {id:'sounds/enemy-squish4', src:'sounds/enemy-squish4.mp3'},
-        {id:'sounds/enemy-eating.mp3', src:'sounds/enemy-eating.mp3'}
+        {id:'sounds/enemy-eating.mp3', src:'sounds/enemy-eating.mp3'},
+        {id:'sounds/level-up.mp3', src:'sounds/level-up.mp3'},
     ]);
 
     //preload up all of our images using the provided resources helper

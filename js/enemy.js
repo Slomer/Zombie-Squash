@@ -115,6 +115,8 @@ Enemy.prototype.hurt = function(dt, reset) {
             //we want 1 new enemy active enemy added per difficulty level
             //TODO: make this adjustable via global instead of static one per level
             createEnemy();
+            //play the elvel up sound
+            createjs.Sound.play('sounds/level-up.mp3');
         }
         //how fast do we move
         this.speed = _.random(5, 15) * GLBL.difficulty;
