@@ -274,7 +274,7 @@ function createEnemy(){
     //look for any available inactive Enemy
     var thisEnemy = _.find(allEnemies,function(enemy){return enemy.active !== true;});
     //if we didn't find any, make a new one (with a cap for sanity sake)
-    if (thisEnemy === null && allEnemies.length < GLBL.maxEnemies) {
+    if (thisEnemy === undefined && allEnemies.length < GLBL.maxEnemies) {
         allEnemies.push(thisEnemy = new Enemy);
     }
     //now activate our enemy.  It should only be null above our cap, but check it first.

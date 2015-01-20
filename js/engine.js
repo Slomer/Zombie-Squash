@@ -215,6 +215,11 @@
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
+
+        allWeapons.forEach(function(weapon) {
+            weapon.update(dt);
+        });
+
         player.update(dt);
     }
 
@@ -291,7 +296,7 @@
                 (GLBL.rows+0.5)*GLBL.rowHeight -10,50,85);
             heartLoc +=GLBL.colWidth/2;
         }
-        for (healthCount = player.health;healthCount < 
+        for (healthCount = player.health;healthCount <
             player.maxHealth;healthCount++){
 
             ctx.drawImage(Resources.get('images/ui-heart2.png'),heartLoc,
@@ -300,7 +305,7 @@
         }
 
         //draw our info text a little to the right of our kill icon
-        uiText = player.kills + '  Level: ' + (GLBL.difficulty - 
+        uiText = player.kills + '  Level: ' + (GLBL.difficulty -
             GLBL.difficultyStart + 1);
 
         ctx.fillText( uiText,
@@ -340,6 +345,12 @@
                 forEach(function(enemy) {enemy.render(dt);
         });
 
+        //render any weapons that are behind the player
+        _.filter(_.sortBy(allWeapons,function(weapon){return weapon.y;}),
+            function(weapon){return weapon.y <= player.y;}).
+                forEach(function(weapon) {weapon.render(dt);
+        });   
+
         //render the front of any gores that are all the way behind the player
         _.filter(allGores, function(gore){return gore.y + 5 < player.y;}).
             forEach(function(gore) {gore.render(dt,true);});
@@ -361,6 +372,12 @@
                 forEach(function(enemy) {enemy.render(dt);
         });
 
+        //render any weapons that are in front of the player
+        _.filter(_.sortBy(allWeapons,function(weapon){return weapon.y;}),
+            function(weapon){return weapon.y > player.y;}).
+                forEach(function(weapon) {weapon.render(dt);
+        });        
+
     }
 
     /**
@@ -381,7 +398,7 @@
         };
         //reset game level
         GLBL.difficulty = GLBL.difficultyStart;
-        //since we only have one player, create one to start and 
+        //since we only have one player, create one to start and
         //just overwrite it for resets.
         player = new Player();
         //activate some enemies again
@@ -420,7 +437,7 @@
             });
 
         //check for player pain, no pain if jumping or crossing the screen
-        if (collList.length > 0 && player.z === 0 && 
+        if (collList.length > 0 && player.z === 0 &&
             player.clone.cloning !== true) {
                 player.sprites.status = player.sprites.alert;
                 player.hurt();
@@ -438,7 +455,7 @@
      * draw our game level. Then set init as the callback method, so that when
      * all of these images are properly loaded our game will start.
      */
-    
+
     //load up our sound plugin and tell it to only use HTML5 audio
     createjs.Sound.registerPlugins([createjs.HTMLAudioPlugin]);
     //to enable web audio,uncomment this instead

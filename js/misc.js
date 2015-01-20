@@ -44,7 +44,7 @@ var allMakeups = {
  * allWeapons acts as a weapon template holder for all future weapons
  * @type {Object}
  */
-var allWeapons = {
+var allHandWeapons = {
     weapon1 : {
         sprites : {
             up : 'images/weapon-slash-up.png',
@@ -157,7 +157,7 @@ function createSplash(x,y,upSplash,silent){
     //look for any available existing splashes
     var thisSplash = _.find(allSplashes,function(splash){return splash.splashing !== true;});
     //if we didn't find any, make a new one (with a cap for sanity sake)
-    if (thisSplash === null && allSplashes.length < GLBL.maxSplashes) {
+    if (thisSplash === undefined && allSplashes.length < GLBL.maxSplashes) {
         allSplashes.push(thisSplash = new Splash);
     }
     //now activate our splash.  It should only be null above our cap, but check it first.
@@ -294,7 +294,7 @@ function createGore(x,y,upGore,silent){
     //look for any available existing splashes
     var thisGore = _.find(allGores,function(gore){return gore.goring !== true;});
     //if we didn't find any, make a new one (with a cap for sanity sake)
-    if (thisGore === null && allGores.length < GLBL.maxGores) {
+    if (thisGore === undefined && allGores.length < GLBL.maxGores) {
         allGores.push(thisGore = new Gore);
     }
     //now activate our gore.  It should only be null above our cap, but check it first.
@@ -320,6 +320,12 @@ function createGoreSound() {
     createjs.Sound.play(_.sample(this.sounds.splashes));
 }
 
+
+// make a container for our splashes
+var allWeapons = [];
+// start off with 5 splashes to use.  We can make more later as we need them
+for (var weaponCount = 0;weaponCount < 1; weaponCount++) {
+    allWeapons.push(new Weapon);}
 // make a container for our splashes
 var allSplashes = [];
 // start off with 5 splashes to use.  We can make more later as we need them

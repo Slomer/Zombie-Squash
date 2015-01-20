@@ -87,7 +87,9 @@ var GLBL = {
     //sanity check on number of enemies.  Not sure what a good setting is yet
     //the intention is to prevent a crash and not to cap the difficulty
     maxEnemies : 500,
-    //sanity check on splashes.
+    //sanity check on weapons.
+    maxWeapons : 20,
+    //sanity check on gore effects.
     maxSplashes : 20,
     //sanity check on gore effects.
     maxGores : 30,

@@ -137,7 +137,7 @@ var Player = function () {
     this.killsThisLevel = 0;
     this.swimming = false;
     //weapon stuff
-    this.weapon = _.sample(allWeapons);
+    this.weapon = _.sample(allHandWeapons);
     this.attacking = false;
 
 };
@@ -167,7 +167,7 @@ Player.prototype.attack = _.throttle(function() {
     if (attackList.length > 0) {
         _.each(attackList, function(Enemy){Enemy.hurt();});
     }
-
+    //createWeapon(player.x, player.y);
     //play a sound.  Using jump sound for now.
     //TODO: make an attack sound
     createjs.Sound.play(_.sample(this.sounds.jumps));
