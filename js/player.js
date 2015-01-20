@@ -638,3 +638,93 @@ Player.prototype.movement = function(dt) {
     }
 };
 
+/**
+ * function to set up our next move and then delay so we can only buffer
+ * another move after a short delay. also throttled to prevent crazy fast
+ * checking if delay is not used somewhere
+ * @return {none}
+ */
+Player.prototype.move = function() {
+    // only try to move if we have a destination on at least one axis
+    if (this.x !== this.x2 || this.y != this.y2){
+        // prevent moves from immediately being buffered for the next
+        // turn to avoid accidental double moves
+        this.bufferDelay = true;
+        // change sprite as needed
+        this.sprites.current = this.sprites[this.directiondraw];
+        this.sprites.currentjump = this.sprites[this.directiondraw + "jump"];
+
+        // allow a move to be buffered again after a set time
+        // TODO: rework the delay variables now that move() is not throttled
+        _.delay(function(){player.bufferDelay = false;},GLBL.moveDelay/2);
+    }
+};
+
+/**
+ * function to handle all input keys, except for pauses.
+ * @param  {string} key is an identifier of the key pressed from our allowedKeys array
+ * @return {none}
+ */
+Player.prototype.handleInput = function(key) {
+    //  note, pauses presses are handled in the listener and never make it here
+    switch (key){
+    case 'left':
+        if (this.x === this.x2) {
+            this.direction = 'left' ;
+            // we want up and down to be dominant draw directions
+            // so don't change unless we aren't moving up or down
+            if (this.y === this.y2){this.directiondraw = 'left';}
+            // if we hit left side of screen, take a step then teleport to
+            // right side use a clone to make this a smooth transition
+            if (this.x === 0) {
+                this.teleport.telX = true;
+                this.teleport.x = 101 * (GLBL.cols - 1);
+                this.clone.xoff = 101 * (GLBL.cols);
+            }
+            // set the x location of our next step
+            this.x2 = this.x - 101;
+        }
+        break;
+    case 'right':
+        if (this.x === this.x2) {
+            this.direction = 'right';
+            // we want up and down to be dominant draw directions
+            // so don't change unless we aren't moving up or down
+            if (this.y === this.y2){this.directiondraw = 'right';}
+            // if we hit right side of screen, take a step then teleport to
+            // left side use a clone to make this a smooth transition
+            if (this.x === ((GLBL.cols -1) * GLBL.colWidth)) {
+                this.teleport.telX = true;
+                this.teleport.x = 0;
+                this.clone.xoff = -101 * (GLBL.cols);
+            }
+            //set the x location of our next step
+            this.x2 = this.x + 101;
+        }
+        break;
+    case 'up':
+        if (this.y === this.y2) {
+            this.direction = 'up';
+            this.directiondraw = 'up';
+            // player can't move past top row like it can on the sides
+            if (this.y >= 0) { this.y2 = this.y - 83;}
+        }
+        break;
+    case 'down':
+        if (this.y === this.y2) {
+            this.direction = 'down';
+            this.directiondraw = 'down';
+            // player can't move past bottom row like it can on the sides
+            if (this.y <= 83 * (GLBL.rows - 2)) { this.y2 = this.y + 83;}
+        }
+        break;
+    case 'jump':
+        this.jump();
+        break;
+    case 'attack':
+        this.attack();
+        break;
+    default :
+        break;
+    }
+};
